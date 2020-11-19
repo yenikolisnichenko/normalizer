@@ -57,12 +57,14 @@ func writeCSV(lines [][]string) {
 		timeStamp := changeTime(line[0])
 		address := line[1]
 		zipcode := checkZip(line[2])
+		fullname := upcaseFn(line[3])
 		comment := line[7]
 
 		normLine := []string{
 			timeStamp,
 			address,
 			zipcode,
+			fullname,
 			comment,
 		}
 
@@ -132,4 +134,10 @@ func checkZip(zip string) string {
 	// pad with zeros if necessary
 	paddedZip := fmt.Sprintf("%05s", zip)
 	return paddedZip
+}
+
+// upcaseFn upcases fullname
+func upcaseFn(fullname string) string {
+	// ToUpper returns s with all Unicode letters mapped to their upper case, handles non-English names
+	return strings.ToUpper(fullname)
 }
