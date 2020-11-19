@@ -44,7 +44,13 @@ func writeCSV(lines [][]string) {
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
-	for _, line := range lines {
+	for i, line := range lines {
+
+		// pass the header as is
+		if i == 0 {
+			_ = writer.Write(line)
+			continue
+		}
 
 		timeStamp := changeTime(line[0])
 		address := line[1]
