@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -58,6 +59,9 @@ func writeCSV(lines [][]string) {
 		address := line[1]
 		zipcode := checkZip(line[2])
 		fullname := upcaseFn(line[3])
+		fooDur := durationSecs(line[4])
+		barDur := durationSecs(line[5])
+		totalDur := fooDur + barDur
 		comment := line[7]
 
 		normLine := []string{
@@ -65,6 +69,9 @@ func writeCSV(lines [][]string) {
 			address,
 			zipcode,
 			fullname,
+			strconv.FormatFloat(fooDur, 'f', 3, 64),
+			strconv.FormatFloat(barDur, 'f', 3, 64),
+			strconv.FormatFloat(totalDur, 'f', 3, 64),
 			comment,
 		}
 
@@ -140,4 +147,18 @@ func checkZip(zip string) string {
 func upcaseFn(fullname string) string {
 	// ToUpper returns s with all Unicode letters mapped to their upper case, handles non-English names
 	return strings.ToUpper(fullname)
+}
+
+// durationSecs splits duration into hour, min, sec and returns total seconds
+func durationSecs(dur string) float64 {
+	durSlice := strings.Split(dur, ":")
+
+	hrs, _ := strconv.ParseFloat(durSlice[0], 64)
+	mins, _ := strconv.ParseFloat(durSlice[1], 64)
+	secs, _ := strconv.ParseFloat(durSlice[2], 64)
+
+	hrMins := hrs * 60.0
+	minSecs := (mins + hrMins) * 60.0
+	totalSecs := secs + minSecs
+	return float64(totalSecs)
 }
