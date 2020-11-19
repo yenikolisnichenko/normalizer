@@ -56,11 +56,13 @@ func writeCSV(lines [][]string) {
 
 		timeStamp := changeTime(line[0])
 		address := line[1]
+		zipcode := checkZip(line[2])
 		comment := line[7]
 
 		normLine := []string{
 			timeStamp,
 			address,
+			zipcode,
 			comment,
 		}
 
@@ -123,4 +125,11 @@ func padZeros(str string, c string) string {
 	joinStr := strings.Join(splitStr, c)
 
 	return joinStr
+}
+
+// checkZip converts zip str to 5 char long zip
+func checkZip(zip string) string {
+	// pad with zeros if necessary
+	paddedZip := fmt.Sprintf("%05s", zip)
+	return paddedZip
 }
