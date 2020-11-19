@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/csv"
-	"fmt"
 	"log"
 	"os"
 )
@@ -13,7 +12,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(lines)
+	writeCSV(lines)
 
 }
 
@@ -31,4 +30,20 @@ func readCSV(filename string) ([][]string, error) {
 		log.Fatal("Error reading lines in file", err)
 	}
 	return lines, nil
+}
+
+// writeCSV iterates through lines from parsed file and sends to new file, currently as-is
+func writeCSV(lines [][]string) {
+	file, err := os.Create("clean-sample.csv")
+	if err != nil {
+		log.Fatal("Failed to create file: ", err)
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	for _, line := range lines {
+		_ = writer.Write(line)
+	}
 }
