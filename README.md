@@ -32,7 +32,7 @@ Normalized, in this case, means:
   Character.
 
 ## Assumptions:
- 
+
 * The input document is in UTF-8
 * Any times that are missing timezone information are in US/Pacific
 * Any invalid character will be replaced with the Unicode Replacement
@@ -42,7 +42,9 @@ warning to `stderr` will be displayed and the row will be dropped from the outpu
 
 ## How to run it
 
+After building binary run:
+
 ```sh
-./normalizer < sample.csv > output.csv
+./normalizer sample.csv output.csv
 ```
 
