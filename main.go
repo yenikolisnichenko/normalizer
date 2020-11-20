@@ -11,13 +11,21 @@ import (
 )
 
 func main() {
-	// get data from sample csv
-	lines, err := readCSV("sample.csv")
+	// get args from stdin
+	args := os.Args[1:]
+	if len(args) < 2 {
+		log.Fatal("Please include input and output file")
+	}
+
+	inputFile := args[0]
+	outputFile := args[1]
+
+	lines, err := readCSV(inputFile)
 	if err != nil {
 		log.Fatal(err)
 	}
-	writeCSV(lines)
 
+	writeCSV(outputFile, lines)
 }
 
 // readCSV opens a file and returns the lines
@@ -37,8 +45,8 @@ func readCSV(filename string) ([][]string, error) {
 }
 
 // writeCSV iterates through lines from parsed file and sends to new file, currently as-is
-func writeCSV(lines [][]string) {
-	file, err := os.Create("clean-sample.csv")
+func writeCSV(filename string, lines [][]string) {
+	file, err := os.Create(filename)
 	if err != nil {
 		log.Fatal("Failed to create file: ", err)
 	}
@@ -55,6 +63,7 @@ func writeCSV(lines [][]string) {
 			continue
 		}
 
+		// modify each field as necessary
 		timeStamp := changeTime(line[0])
 		address := line[1]
 		zipcode := checkZip(line[2])
@@ -161,4 +170,11 @@ func durationSecs(dur string) float64 {
 	minSecs := (mins + hrMins) * 60.0
 	totalSecs := secs + minSecs
 	return float64(totalSecs)
+}
+
+// validateUni checks if string is valid utf-8 chars and replace if not
+// this is not working in my code, but works in go playground :/
+func validateUni(str string) string {
+	replace := strings.ToValidUTF8(str, "\uFFFD")
+	return replace
 }
