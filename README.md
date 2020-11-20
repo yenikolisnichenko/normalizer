@@ -30,10 +30,14 @@ because it turns a date field into something unparseable) a
 warning to `stderr` will be displayed and the row will be dropped from the output
 
 ## How to run it
-
-After building binary run:
-
+To run tests
 ```sh
+go test
+```
+
+To run program
+```sh
+go build .
 ./normalizer sample.csv output.csv
 ```
 
